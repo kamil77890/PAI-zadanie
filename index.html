@@ -6,6 +6,12 @@
     <title>Audio</title>
     <link rel="stylesheet" href="style.css" />
     <script defer src="./script.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Assistant:wght@200&family=Fuggles&family=Nunito+Sans&family=Young+Serif&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <aside>
@@ -19,35 +25,33 @@
         <section class="box">
           <img class="img" src="./img/wpexplorer.svg" alt="Explore" />
           <h3>Explore</h3>
-          <img class="arrow1" src="/./img/arrow-right-solid.svg" alt="right" />
         </section>
         <section class="box">
           <img class="img" src="./img/radio-solid.svg" alt="Radio" />
           <h3>Radio</h3>
-          <img class="arrow1" src="/./img/arrow-right-solid.svg" alt="right" />
         </section>
       </section>
       <p>Library</p>
       <section class="boxes">
         <section class="box">
-          <img class="img" src="" alt="songs" />
+          <img
+            class="img"
+            src="https://cdn.iconscout.com/icon/premium/png-256-thumb/song-1470817-1244167.png?f=webp"
+            alt="songs"
+          />
           <h3>Songs</h3>
-          <img class="arrow1" src="/./img/arrow-right-solid.svg" alt="right" />
         </section>
         <section class="box">
           <img class="img" src="./img/compact-disc-solid.svg" alt="albums" />
           <h3>Albums</h3>
-          <img class="arrow1" src="/./img/arrow-right-solid.svg" alt="right" />
         </section>
         <section class="box">
           <img class="img" src="./img/palette-solid.svg" alt="Artist" />
           <h3>Artist</h3>
-          <img class="arrow1" src="/./img/arrow-right-solid.svg" alt="right" />
         </section>
-        <section class="box">
+        <section class="Favorites">
           <img class="img" src="./img/heart-regular.svg" alt="Favorites" />
           <h3>Favorites</h3>
-          <img class="arrow1" src="/./img/arrow-right-solid.svg" alt="right" />
         </section>
       </section>
       <section class="addPlaylist">
@@ -59,7 +63,6 @@
         <section class="box">
           <img class="img" src="./img/play-solid.svg" alt="Playlist" />
           <h3>Your Playlist</h3>
-          <img class="arrow1" src="/./img/arrow-right-solid.svg" alt="right" />
         </section>
       </section>
     </aside>
@@ -83,7 +86,12 @@
           src="./img/magnifying-glass-solid.svg"
           alt="Search"
         />
-        <input type="text" placeholder="Search..." />
+        <input
+          type="text"
+          placeholder="Search..."
+          onkeyup="search_song()"
+          name="search"
+        />
       </label>
       <button class="premium">Premium</button>
       <img class="bell" src="./img/bell-solid.svg" alt="bell" />
@@ -104,11 +112,14 @@
         />
       </section>
       <section class="info">
-        <span>Id</span>
         <span>Title</span>
-        <span></span>
+        <span>Style</span>
+        <span>Bmp</span>
+        <span>Durration</span>
+        <span>Favorites</span>
       </section>
       <section id="songs" class="songs"></section>
+      <section id="favorites"></section>
     </main>
   </body>
 </html>

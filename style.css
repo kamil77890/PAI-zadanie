@@ -2,6 +2,7 @@
   margin: 0;
   box-sizing: border-box;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 :root {
@@ -22,6 +23,7 @@ body {
   flex-wrap: wrap;
   flex-direction: column;
   margin: 0;
+  flex-grow: 1;
 }
 
 /* Header */
@@ -31,6 +33,7 @@ header {
   align-items: center;
   padding: 20px 5px;
   justify-content: space-around;
+  height: 100px;
 }
 
 .arrow {
@@ -228,6 +231,24 @@ aside {
   gap: 20px;
   padding-right: 10px;
 }
+.Favorites {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 10px 0;
+  border: 1px solid #333333;
+  border-radius: 20px;
+  margin-left: 20px;
+  padding: 5px 10px;
+  gap: 20px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+.Favorites:hover {
+  cursor: pointer;
+  background-color: #333333;
+  transition: 100ms;
+}
 
 .box:hover {
   cursor: pointer;
@@ -281,23 +302,78 @@ p {
 /* main */
 
 main {
+  flex-grow: 1;
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
 }
-.content{
+
+.content {
   display: flex;
   align-items: center;
   margin: 35px;
   margin-left: 150px;
   border-radius: 20px;
-  overflow: hidden;
   width: 700px;
   height: 350px;
   flex: 1;
 }
-.content > img{
+#favorites {
+  display: none;
+  align-items: center;
+  text-align: center;
+  justify-content: space-around;
+  color: var(--white);
+  padding: 5px;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.content > img {
   display: flex;
   flex: 1;
   border-radius: 20px;
+}
+.info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: var(--white);
+  width: 750px;
+  height: auto;
+  font-family: "Assistant", sans-serif;
+  font-family: "Fuggles", cursive;
+  font-family: "Nunito Sans", sans-serif;
+  font-family: "Young Serif", serif;
+}
+.song {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-around;
+  color: var(--white);
+  padding: 5px;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.imgSongs {
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 20px;
+  padding: 5px;
+  gap: 15px;
+}
+span {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  gap: 5px;
+  justify-content: space-evenly;
+}
+
+.songs {
+  width: 750px;
 }
