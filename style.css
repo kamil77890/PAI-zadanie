@@ -2,7 +2,6 @@
   margin: 0;
   box-sizing: border-box;
   overflow-x: hidden;
-  overflow-y: auto;
 }
 
 :root {
@@ -61,6 +60,7 @@ header {
   align-items: center;
   justify-content: center;
 }
+
 .bell:hover {
   color: var(--white);
   scale: 1.09;
@@ -179,6 +179,32 @@ input:focus {
 }
 
 /* Aside - Leftbar */
+.right-side {
+  width: 400px;
+  padding: 20px;
+  position: fixed;
+  display: none;
+  right: 75px;
+  border-radius: 20px;
+  margin-top: 20px;
+  background-color: none;
+}
+.title {
+  text-align: center;
+  color: var(--white);
+  margin-top: 15px;
+  font-size: 30px;
+}
+.background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 400px;
+  z-index: -1;
+  border-radius: 20px;
+}
+
 aside {
   background: #000;
   width: 320px;
@@ -223,36 +249,32 @@ aside {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 10px 0;
-  border: 1px solid #333333;
+  padding: 10px;
   border-radius: 20px;
   margin-left: 20px;
-  padding: 5px 10px;
+  margin: 5px;
   gap: 20px;
-  padding-right: 10px;
 }
 .Favorites {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 10px 0;
-  border: 1px solid #333333;
+  padding: 10px;
   border-radius: 20px;
   margin-left: 20px;
-  padding: 5px 10px;
+  margin: 5px;
   gap: 20px;
-  padding-right: 10px;
   cursor: pointer;
 }
 .Favorites:hover {
   cursor: pointer;
-  background-color: #333333;
+  background-color: #328a32;
   transition: 100ms;
 }
 
 .box:hover {
   cursor: pointer;
-  background-color: #333333;
+  background-color: #328a32;
   transition: 100ms;
 }
 

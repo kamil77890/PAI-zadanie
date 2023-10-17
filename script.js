@@ -1,28 +1,30 @@
 const aside = document.querySelector("aside");
 const openButton = document.querySelector("#open");
+const closeButton = document.querySelector("#close");
+const songsContainer = document.querySelector("#songs");
+const leftAside = document.querySelector(".right-side");
+
+const songs = [];
 
 openButton.addEventListener("click", () => {
   aside.classList.toggle("aside-open");
   aside.classList.remove("aside-closed");
-  setInterval(displayFlexSet, 5);
+  displayFlexSet();
 });
-
-const closeButton = document.querySelector("#close");
 
 closeButton.addEventListener("click", () => {
   aside.classList.toggle("aside-closed");
   aside.classList.remove("aside-open");
-  setInterval(displayNoneSet, 511);
+  displayNoneSet();
 });
 
 function displayNoneSet() {
   aside.style.display = "none";
 }
+
 function displayFlexSet() {
   aside.style.display = "flex";
 }
-
-const songsContainer = document.querySelector("#songs");
 
 async function fetchAndDisplaySongs() {
   const response = await fetch(
@@ -45,12 +47,16 @@ async function fetchAndDisplaySongs() {
           item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
         }" alt="like" data-liked="${item.liked}" />
       </span>`;
+
+    section.addEventListener("click", () => infoFunction(item));
     songsContainer.appendChild(section);
 
     const likeButton = section.querySelector(".like img");
     likeButton.addEventListener("click", () =>
       handleLikeButtonClick(item, likeButton)
     );
+
+    songs.push(item);
   });
 }
 
@@ -65,40 +71,7 @@ function handleLikeButtonClick(song, likeButton) {
   song.liked = !song.liked;
 }
 
-// favorites
-
-const favorites = document.querySelector(".Favorites");
-
-function addFavorite() {
-  songsContainer.style.display = "none";
-  if (song.liked) {
-    const section = document.createElement("section");
-    section.classList.add("favorite");
-    section.innerHTML = `
-      <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
-      item.title
-    }</span>
-      <span>${item.genre}</span>
-      <span>${item.bpm}</span>
-      <span>${item.duration}</span>
-      <span class="like">
-        <img src="${
-          item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-        }" alt="like" data-liked="${item.liked}" />
-      </span>`;
-    favorites.appendChild(section);
-
-    const likeButton = section.querySelector(".like img");
-    likeButton.addEventListener("click", () =>
-      handleLikeButtonClick(item, likeButton)
-    );
-  }
-}
-
-favorites.addEventListener("click", addFavorite);
-
 // Search bar
-
 function search_song() {
   let input = document.querySelector("input").value.toLowerCase();
   const songs = document.querySelectorAll(".song");
@@ -113,4 +86,12 @@ function search_song() {
       song.style.display = "none";
     }
   });
+}
+
+function infoFunction(item) {
+  leftAside.style.display = "block";
+  const titleElement = document.querySelector(".title");
+  const backgroundElement = document.querySelector(".background");
+  titleElement.querySelector("h1").innerHTML = item.title;
+  backgroundElement.innerHTML = `<img class="background" src="${item.coverUrl}" alt="song" />`;
 }
