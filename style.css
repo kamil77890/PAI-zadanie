@@ -61,6 +61,7 @@ header {
   justify-content: center;
 }
 .circleTool {
+  margin: 0;
   width: 50px;
   height: inherit;
 }
@@ -70,8 +71,24 @@ header {
   justify-content: center;
   gap: 30px;
   padding: 10px;
-  border-bottom: 1px solid #ffffff;
 }
+.scrollable-container {
+  width: 750px;
+  height: 1050px;
+  position: relative;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.scrollable-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(0);
+}
+
 #audio-player-container {
   --seek-before-width: 0%;
   --volume-before-width: 100%;
@@ -141,7 +158,7 @@ input[type="range"] {
   width: 48%;
   margin: 0;
   padding: 0;
-  height: 19px;
+  height: 9px;
   margin: 30px 2.5% 20px 2.5%;
   float: left;
   outline: none;
@@ -155,6 +172,7 @@ input[type="range"]::-webkit-slider-runnable-track {
     rgba(0, 125, 181, 0.6) var(--buffered-width),
     rgba(0, 125, 181, 0.2) var(--buffered-width)
   );
+  z-index: 2;
 }
 input[type="range"]::before {
   position: absolute;
@@ -268,7 +286,6 @@ input[type="range"]:active::-ms-thumb {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 300px;
   gap: 20px;
 }
 input[type="range"] {
@@ -376,10 +393,17 @@ input:focus {
 .search:hover {
   cursor: pointer;
 }
+.liked {
+  position: absolute;
+  top: 385px;
+  right: 0;
+  margin-right: 30px;
+}
 
 /* Aside - Leftbar */
 .right-side {
   width: 400px;
+  height: 600px;
   padding: 20px;
   position: fixed;
   display: none;
@@ -423,12 +447,18 @@ aside {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
+  width: 200px;
   height: auto;
   margin-bottom: 10px;
   color: var(--white);
   gap: 20px;
 }
+.logo > img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+} 
+
 
 .boxes {
   display: flex;
@@ -524,7 +554,7 @@ main {
 }
 
 .content {
-  display: flex;
+  display: none;
   align-items: center;
   margin: 35px;
   margin-left: 150px;
@@ -549,21 +579,26 @@ main {
   flex: 1;
   border-radius: 20px;
 }
+.wykonawca {
+  display: flex;
+  font-size: 16px;
+  font-family: sans-serif;
+  margin-top: 300px;
+  color: var(--white);
+}
 .info {
   display: flex;
   justify-content: space-around;
   align-items: center;
   color: var(--white);
   width: 750px;
-  height: auto;
+  height: 50px;
   font-family: "Assistant", sans-serif;
   font-family: "Fuggles", cursive;
   font-family: "Nunito Sans", sans-serif;
   font-family: "Young Serif", serif;
   font-size: 20px;
   border-bottom: 0.2px solid #ffffff;
-  margin-bottom: 3px;
-  padding: 5px;
 }
 .song {
   display: flex;
@@ -574,11 +609,34 @@ main {
   padding: 5px;
   gap: 10px;
   cursor: pointer;
+  margin: 5px;
   margin-top: 10px;
 }
+::-webkit-scrollbar-thumb {
+  background: #888; /* Set the background color of the thumb */
+  border-radius: 5px; /* Add rounded corners to the thumb */
+}
+
+/* Style the track (the non-draggable part) of the scrollbar */
+::-webkit-scrollbar-track {
+  background: #eee; /* Set the background color of the track */
+}
+
+    Firefox:
+
+Firefox has its own set of pseudo-elements for styling scrollbars. Here's an example of how to style scrollbars in Firefox:
+
+css
+
+/* Style the thumb (the draggable part) of the scrollbar */
+* {
+  scrollbar-width: thin; /* Set the width of the scrollbar */
+  scrollbar-color: #888 #eee; /* Set the thumb and track colors */
+}
+
 .imgSongs {
   text-align: center;
-  width: 50px;
+  width: 70px;
   height: 50px;
   border-radius: 20px;
   padding: 5px;
@@ -587,7 +645,7 @@ main {
 span {
   display: flex;
   align-items: center;
-  width: 250px;
+  width: 150px;
   gap: 5px;
   justify-content: space-evenly;
 }
