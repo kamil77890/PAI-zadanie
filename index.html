@@ -62,84 +62,86 @@
         </section>
       </section>
     </aside>
-    <header>
-      <img
-        id="close"
-        class="arrow"
-        src="./img/arrow-left-solid.svg"
-        alt="left"
-      />
-      <img
-        id="open"
-        class="arrow"
-        src="./img/arrow-right-solid.svg"
-        alt="right"
-      />
-
-      <label for="input">
-        <img
-          class="search"
-          src="./img/magnifying-glass-solid.svg"
-          alt="Search"
-        />
-        <input
-          type="text"
-          placeholder="Search..."
-          onkeyup="search_song()"
-          name="search"
-        />
-      </label>
-      <button class="premium">Premium</button>
-      <img class="bell" src="./img/bell-solid.svg" alt="bell" />
-      <img class="bell" src="./img/message-regular.svg" alt="message" />
-      <section class="user">
-        <img class="user" src="./img/user-solid.svg" alt="user" />
-        <section class="settings">
-          <h3>Username</h3>
-          <p>setting</p>
-        </section>
-      </section>
-    </header>
     <main>
-      <section class="content">
+      <header>
         <img
-          src="https://www.gsmmaniak.pl/wp-content/uploads/gsmmaniak/2018/09/spotify.jpg"
-          alt="spotify"
+          id="close"
+          class="arrow"
+          src="./img/arrow-left-solid.svg"
+          alt="left"
         />
-      </section>
-      <section class="info">
-        <span>Title</span>
-        <span>Style</span>
-        <span>Bmp</span>
-        <span>Durration</span>
-        <span>Favorites</span>
-      </section>
-      <section id="songs" class="songs"></section>
+        <img
+          id="open"
+          class="arrow"
+          src="./img/arrow-right-solid.svg"
+          alt="right"
+        />
 
-      <section id="favorites"></section>
-      <aside class="right-side">
-        <section class="title">
-          <h1 class="title"></h1>
-        </section>
-        <section class="background"></section>
-        <section class="wykonawca"></section>
-        <section class="liked"></section>
-        <section class="tools">
-          <input type="range" id="seek-slider" max="100" value="0" />
-          <section class="tool">
-            <img
-              class="arrow"
-              src="./img/arrow-left-solid (1).svg"
-              alt="arrow"
-            />
-            <img
-              class="circleTool"
-              src="./img/circle-play-regular.svg"
-              alt="circle"
-            />
-            <img class="arrow" src="./img/arrow-right-solid.svg" alt="arrow" />
+        <label for="input">
+          <img
+            class="search"
+            src="./img/magnifying-glass-solid.svg"
+            alt="Search"
+          />
+          <input
+            type="text"
+            placeholder="Search..."
+            onkeyup="search_song()"
+            name="search"
+          />
+        </label>
+        <button class="premium">Premium</button>
+        <img class="bell" src="./img/bell-solid.svg" alt="bell" />
+        <img class="bell" src="./img/message-regular.svg" alt="message" />
+        <section class="user">
+          <img class="user" src="./img/user-solid.svg" alt="user" />
+          <section class="settings">
+            <h3>Username</h3>
+            <p>setting</p>
           </section>
         </section>
+      </header>
+      <article>
+        <section class="content">
+          <img
+            src="https://www.gsmmaniak.pl/wp-content/uploads/gsmmaniak/2018/09/spotify.jpg"
+            alt="spotify"
+          />
+        </section>
+        <section class="info">
+          <span>Title</span>
+          <span>Style</span>
+          <span>Bmp</span>
+          <span>Durration</span>
+          <span>Favorites</span>
+        </section>
+        <section id="songs" class="songs"></section>
+        <section id="favorites"></section>
+        <aside class="right-side">
+          <section class="title">
+            <h1 class="title"></h1>
+          </section>
+          <section class="background"></section>
+          <section class="wykonawca"></section>
+          <section class="liked"></section>
+          <section class="tools">
+            <input type="range" id="seek-slider" max="100" value="0" />
+            <section class="tool">
+              <img
+                class="arrow"
+                src="./img/arrow-left-solid (1).svg"
+                alt="arrow"
+              />
+              <img
+                class="circleTool"
+                src="./img/circle-play-regular.svg"
+                alt="circle"
+              />
+              <img class="arrow" src="./img/arrow-right-solid.svg" alt="arrow" />
+            </section>
+          </section>
+      </article>
+      
       </aside>
     </main>
   </body>
