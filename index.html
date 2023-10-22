@@ -76,20 +76,29 @@
           src="./img/arrow-right-solid.svg"
           alt="right"
         />
-
-        <label for="input">
+        <form>
+          <label for="input">
           <img
             class="search"
             src="./img/magnifying-glass-solid.svg"
             alt="Search"
           />
           <input
-            type="text"
+            type="search"
             placeholder="Search..."
             onkeyup="search_song()"
             name="search"
           />
-        </label>
+          </label>
+        </form>
+        <form id="selectMusic">
+          <select class="select" name="Style" id="typeOfMusic">
+            <option value="All">All</option>
+          </select>
+        </form>
+        
+        </select>
+        
         <button class="premium">Premium</button>
         <img class="bell" src="./img/bell-solid.svg" alt="bell" />
         <img class="bell" src="./img/message-regular.svg" alt="message" />
@@ -125,7 +134,7 @@
           <section class="wykonawca"></section>
           <section class="liked"></section>
           <section class="tools">
-            <input type="range" id="seek-slider" max="100" value="0" />
+            <input type="range" max="100" value="0" />
             <section class="tool">
               <img
                 class="arrow"

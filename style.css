@@ -21,6 +21,13 @@ body {
   display: flex;
   margin: 0;
 }
+select {
+  width: 100px;
+  height: 30px;
+  border-radius: 20px;
+  color: var(--black);
+  padding-left: 6px;
+}
 
 /* Header */
 header {

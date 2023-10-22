@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const wykonawca = document.querySelector(".wykonawca");
   const liked = document.querySelector(".liked");
   const favoritesButton = document.querySelector("#favorites");
+  const gentres = document.querySelector("#typeOfMusic");
+  const form = document.querySelector("form");
+  const selectMusic = document.querySelector("#selectMusic");
 
   const songs = [];
   const favorites = [];
@@ -104,4 +107,91 @@ document.addEventListener("DOMContentLoaded", () => {
       item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
     }" alt="like"/>`;
   }
+
+  async function styleMusic() {
+    const responce = await fetch(
+      "https://gist.githubusercontent.com/techniadrian/6ccdb1c837d431bb84c2dfedbec2e435/raw/60783ebfa89c6fd658aaf556b9f7162553ac0729/genres.json"
+    );
+    const data = await responce.json();
+    data.forEach((item) => {
+      if (item !== " ") {
+        gentres.innerHTML += `<option value="${item}">${item}</option>`;
+      }
+    });
+  }
+  styleMusic();
+      //-----------beta testy----------------
+  // function search_song(event) {
+  //   event.preventDefault();
+  //   const search = document.querySelector("#search").value;
+  //   search = search.toLowerCase();
+  //   const filtered = songs.filter((item) => {
+  //     return item.title.toLowerCase().includes(search);
+  //   });
+  //   songsContainer.innerHTML = "";
+  //   filtered.forEach((item) => {
+  //     const section = document.createElement("section");
+  //     section.classList.add("song");
+  //     section.innerHTML = `
+  //       <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
+  //       item.title
+  //     }</span>
+  //     <span>${item.genre}</span>
+  //     <span>${item.bpm}</span>
+  //     <span>${item.duration}</span>
+  //     <span class="like">
+  //       <img src="${
+  //         item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+  //       }" alt="like" data-liked="${item.liked}" />
+  //     </span>`;
+
+  //     section.addEventListener("click", () => infoFunction(item));
+  //     songsContainer.appendChild(section);
+
+  //     const likeButton = section.querySelector(".like img");
+  //     likeButton.addEventListener("click", () =>
+  //       handleLikeButtonClick(item, likeButton)
+  //     );
+  //   });
+  // }
+  // form.addEventListener("submit", search_song);
+
+  function StyleMusic(event) {
+    event.preventDefault();
+    const selectMusic = document.querySelector("#typeOfMusic").value;
+    const filtered = songs.filter((item) => {
+      return item.genre.includes(selectMusic);
+    });
+    if (selectMusic === "All") {
+      songsContainer.innerHTML = "";
+      filtered = fetchAndDisplaySongs();
+    } else {
+      songsContainer.innerHTML = "";
+      filtered.forEach((item) => {
+        const section = document.createElement("section");
+        section.classList.add("song");
+        section.innerHTML = `
+        <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
+          item.title
+        }</span>
+      <span>${item.genre}</span>
+      <span>${item.bpm}</span>
+      <span>${item.duration}</span>
+      <span class="like">
+        <img src="${
+          item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+        }" alt="like" data-liked="${item.liked}" />
+      </span>`;
+
+        section.addEventListener("click", () => infoFunction(item));
+        songsContainer.appendChild(section);
+
+        const likeButton = section.querySelector(".like img");
+        likeButton.addEventListener("click", () =>
+          handleLikeButtonClick(item, likeButton)
+        );
+      });
+    }
+  }
+  selectMusic.addEventListener("change", StyleMusic);
 });
