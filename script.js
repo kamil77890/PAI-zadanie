@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   styleMusic();
-      //-----------beta testy----------------
+  //-----------beta testy----------------
   // function search_song(event) {
   //   event.preventDefault();
   //   const search = document.querySelector("#search").value;
@@ -165,15 +165,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selectMusic === "All") {
       songsContainer.innerHTML = "";
       filtered = fetchAndDisplaySongs();
-    } else {
-      songsContainer.innerHTML = "";
-      filtered.forEach((item) => {
-        const section = document.createElement("section");
-        section.classList.add("song");
-        section.innerHTML = `
+    }
+    songsContainer.innerHTML = "";
+    filtered.forEach((item) => {
+      const section = document.createElement("section");
+      section.classList.add("song");
+      section.innerHTML = `
         <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
-          item.title
-        }</span>
+        item.title
+      }</span>
       <span>${item.genre}</span>
       <span>${item.bpm}</span>
       <span>${item.duration}</span>
@@ -183,15 +183,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }" alt="like" data-liked="${item.liked}" />
       </span>`;
 
-        section.addEventListener("click", () => infoFunction(item));
-        songsContainer.appendChild(section);
+      section.addEventListener("click", () => infoFunction(item));
+      songsContainer.appendChild(section);
 
-        const likeButton = section.querySelector(".like img");
-        likeButton.addEventListener("click", () =>
-          handleLikeButtonClick(item, likeButton)
-        );
-      });
-    }
+      const likeButton = section.querySelector(".like img");
+      likeButton.addEventListener("click", () =>
+        handleLikeButtonClick(item, likeButton)
+      );
+    });
   }
+
   selectMusic.addEventListener("change", StyleMusic);
 });
