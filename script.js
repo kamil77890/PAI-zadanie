@@ -121,40 +121,43 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   styleMusic();
   //-----------beta testy----------------
-  // function search_song(event) {
-  //   event.preventDefault();
-  //   const search = document.querySelector("#search").value;
-  //   search = search.toLowerCase();
-  //   const filtered = songs.filter((item) => {
-  //     return item.title.toLowerCase().includes(search);
-  //   });
-  //   songsContainer.innerHTML = "";
-  //   filtered.forEach((item) => {
-  //     const section = document.createElement("section");
-  //     section.classList.add("song");
-  //     section.innerHTML = `
-  //       <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
-  //       item.title
-  //     }</span>
-  //     <span>${item.genre}</span>
-  //     <span>${item.bpm}</span>
-  //     <span>${item.duration}</span>
-  //     <span class="like">
-  //       <img src="${
-  //         item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-  //       }" alt="like" data-liked="${item.liked}" />
-  //     </span>`;
+  function search_song(event) {
+    event.preventDefault();
 
-  //     section.addEventListener("click", () => infoFunction(item));
-  //     songsContainer.appendChild(section);
+    const searchValue = document.querySelector("#search").value.toLowerCase();
 
-  //     const likeButton = section.querySelector(".like img");
-  //     likeButton.addEventListener("click", () =>
-  //       handleLikeButtonClick(item, likeButton)
-  //     );
-  //   });
-  // }
-  // form.addEventListener("submit", search_song);
+    const filtered = songs.filter((item) => {
+      return item.title.toLowerCase().includes(searchValue);
+    });
+
+    songsContainer.innerHTML = "";
+    filtered.forEach((item) => {
+      const section = document.createElement("section");
+      section.classList.add("song");
+      section.innerHTML = `
+        <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
+        item.title
+      }</span>
+        <span>${item.genre}</span>
+        <span>${item.bpm}</span>
+        <span>${item.duration}</span>
+        <span class="like">
+          <img src="${
+            item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+          }" alt="like" data-liked="${item.liked}" />
+        </span>`;
+
+      section.addEventListener("click", () => infoFunction(item));
+      songsContainer.appendChild(section);
+
+      const likeButton = section.querySelector(".like img");
+      likeButton.addEventListener("click", () =>
+        handleLikeButtonClick(item, likeButton)
+      );
+    });
+  }
+
+  form.addEventListener("submit", search_song);
 
   function StyleMusic(event) {
     event.preventDefault();

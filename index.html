@@ -16,7 +16,7 @@
   <body>
     <aside>
       <section class="logo">
-        <img class="logo" src="./img/spotify (4).svg" alt="Spotify" />
+        <img class="logo-img" src="./img/spotify (4).svg" alt="Spotify" />
         <h2>Spotify</h2>
       </section>
 
@@ -45,7 +45,7 @@
           <img class="img" src="./img/palette-solid.svg" alt="Artist" />
           <h3>Artist</h3>
         </section>
-        <section class="Favorites">
+        <section class="box">
           <img class="img" src="./img/heart-regular.svg" alt="Favorites" />
           <h3>Favorites</h3>
         </section>
@@ -77,18 +77,13 @@
           alt="right"
         />
         <form>
-          <label for="input">
-          <img
-            class="search"
-            src="./img/magnifying-glass-solid.svg"
-            alt="Search"
-          />
-          <input
-            type="search"
-            placeholder="Search..."
-            onkeyup="search_song()"
-            name="search"
-          />
+          <label for="search">
+            <img
+              class="search"
+              src="./img/magnifying-glass-solid.svg"
+              alt="Search"
+            />
+            <input type="search" placeholder="Search..." name="search" />
           </label>
         </form>
         <form id="selectMusic">
@@ -96,17 +91,15 @@
             <option value="All">All</option>
           </select>
         </form>
-        
-        </select>
-        
+
         <button class="premium">Premium</button>
         <img class="bell" src="./img/bell-solid.svg" alt="bell" />
-        <img class="bell" src="./img/message-regular.svg" alt="message" />
+        <img class="message" src="./img/message-regular.svg" alt="message" />
         <section class="user">
-          <img class="user" src="./img/user-solid.svg" alt="user" />
+          <img class="user-img" src="./img/user-solid.svg" alt="user" />
           <section class="settings">
             <h3>Username</h3>
-            <p>setting</p>
+            <p>Settings</p>
           </section>
         </section>
       </header>
@@ -120,8 +113,8 @@
         <section class="info">
           <span>Title</span>
           <span>Style</span>
-          <span>Bmp</span>
-          <span>Durration</span>
+          <span>BPM</span>
+          <span>Duration</span>
           <span>Favorites</span>
         </section>
         <section id="songs" class="songs"></section>
@@ -138,7 +131,7 @@
             <section class="tool">
               <img
                 class="arrow"
-                src="./img/arrow-left-solid (1).svg"
+                src="./img/forward-step-solid.svg"
                 alt="arrow"
               />
               <img
@@ -146,12 +139,15 @@
                 src="./img/circle-play-regular.svg"
                 alt="circle"
               />
-              <img class="arrow" src="./img/arrow-right-solid.svg" alt="arrow" />
+              <img
+                class="arrow"
+                src="./img/forward-step-solid (1).svg"
+                alt="arrow"
+              />
             </section>
           </section>
+        </aside>
       </article>
-      
-      </aside>
     </main>
   </body>
 </html>
