@@ -3,13 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const rightAside = document.querySelector(".right-side");
   const wykonawca = document.querySelector(".wykonawca");
   const liked = document.querySelector(".liked");
-  const favoritesButton = document.querySelector("#favorites");
+  const favoritesButton = document.querySelector("#favoritesButton");
   const gentres = document.querySelector("#typeOfMusic");
   const form = document.querySelector("form");
   const selectMusic = document.querySelector("#selectMusic");
+  const favorites = document.querySelector("#favorites");
 
-  const songs = [];
-  const favorites = [];
+  const music = [];
 
   async function fetchAndDisplaySongs() {
     const response = await fetch(
@@ -17,85 +17,96 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     const data = await response.json();
 
-    data.forEach((item) => {
+    data.forEach((song) => {
       const section = document.createElement("section");
       section.classList.add("song");
       section.innerHTML = `
-        <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
-        item.title
+        <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+        song.title
       }</span>
-        <span>${item.genre}</span>
-        <span>${item.bpm}</span>
-        <span>${item.duration}</span>
+        <span>${song.genre}</span>
+        <span>${song.bpm}</span>
+        <span>${song.duration}</span>
         <span class="like">
           <img src="${
-            item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-          }" alt="like" data-liked="${item.liked}" />
+            song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+          }" alt="like" data-liked="${song.liked}" />
         </span>`;
 
-      section.addEventListener("click", () => infoFunction(item));
+      section.addEventListener("click", () => infoFunction(song));
       songsContainer.appendChild(section);
 
       const likeButton = section.querySelector(".like img");
       likeButton.addEventListener("click", () =>
-        handleLikeButtonClick(item, likeButton)
+        handleLikeButtonClick(songs, likeButton)
       );
-
-      songs.push(item);
+      music.push(song);
+      const songs = music.map((song) => ({ ...song, liked: false }));
     });
   }
 
   fetchAndDisplaySongs();
 
-  function handleLikeButtonClick(song, likeButton) {
-    song.liked = !song.liked;
-    likeButton.src = song.liked
+  function handleLikeButtonClick(songs, likeButton) {
+    songs.liked = !songs.liked;
+    likeButton.src = songs.liked
       ? "./img/heart-solid.svg"
       : "./img/heart-regular.svg";
-
-    if (song.liked) {
-      favorites.push(song);
-    }
   }
 
-  function showFavorites() {
+  function showFavorites(songs) {
+    const songsContainer = document.querySelector("#songs");
+    const favorites = document.querySelector("#favorites");
+
+    // Ukryj kontener zwykłych utworów
     songsContainer.style.display = "none";
-    favoritesButton.style.display = "flex";
-    favorites.forEach((item) => {
-      const section = document.createElement("section");
-      section.classList.add("song");
-      section.innerHTML = `
-        <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
-        item.title
-      }</span>
-        <span>${item.genre}</span>
-        <span>${item.bpm}</span>
-        <span>${item.duration}</span>
-        <span class="like">
-          <img src="${
-            item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-          }" alt="like" data-liked="${item.liked}" />
-        </span>`;
 
-      section.addEventListener("click", () => infoFunction(item));
-      favoritesButton.appendChild(section);
+    // Wyświetl kontener ulubionych utworów
+    favorites.style.display = "flex";
 
-      const likeButton = section.querySelector(".like img");
-      likeButton.addEventListener("click", () =>
-        handleLikeButtonClick(item, likeButton)
-      );
+    // Wyczyść wcześniejszą zawartość kontenera ulubionych
+    favorites.innerHTML = "";
+
+    // Przeiteruj przez wszystkie utwory
+    songs.forEach((song) => {
+      if (song.liked) {
+        const section = document.createElement("section");
+        section.classList.add("song");
+        section.innerHTML = `
+          <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+          song.title
+        }</span>
+          <span>${song.genre}</span>
+          <span>${song.bpm}</span>
+          <span>${song.duration}</span>
+          <span class="like">
+            <img src="${
+              song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+            }" alt="like" data-liked="${song.liked}" />
+          </span>`;
+
+        section.addEventListener("click", () => infoFunction(song));
+
+        // Dodaj sekcję do kontenera ulubionych utworów
+        favorites.appendChild(section);
+
+        const likeButton = section.querySelector(".like img");
+        likeButton.addEventListener("click", () =>
+          handleLikeButtonClick(song, likeButton)
+        );
+      }
     });
   }
 
   favoritesButton.addEventListener("click", showFavorites);
 
-  function infoFunction(item) {
+  function infoFunction(song) {
     rightAside.style.display = "block";
     const titleElement = document.querySelector(".title");
     const backgroundElement = document.querySelector(".background");
-    titleElement.querySelector("h1").innerHTML = item.title;
-    backgroundElement.innerHTML = `<img class="background" src="${item.coverUrl}" alt="song" />`;
-    const list = item.artists;
+    titleElement.querySelector("h1").innerHTML = song.title;
+    backgroundElement.innerHTML = `<img class="background" src="${song.coverUrl}" alt="song" />`;
+    const list = song.artists;
     wykonawca.innerHTML = "";
     list.forEach((artist, index) => {
       if (index > 0) {
@@ -104,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
       wykonawca.innerHTML += artist;
     });
     liked.innerHTML = `<img src="${
-      item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+      song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
     }" alt="like"/>`;
   }
 
@@ -113,12 +124,13 @@ document.addEventListener("DOMContentLoaded", () => {
       "https://gist.githubusercontent.com/techniadrian/6ccdb1c837d431bb84c2dfedbec2e435/raw/60783ebfa89c6fd658aaf556b9f7162553ac0729/genres.json"
     );
     const data = await responce.json();
-    data.forEach((item) => {
-      if (item !== " ") {
-        gentres.innerHTML += `<option value="${item}">${item}</option>`;
+    data.forEach((song) => {
+      if (song !== " ") {
+        gentres.innerHTML += `<option value="${song}">${song}</option>`;
       }
     });
   }
+
   styleMusic();
   //-----------beta testy----------------
   function search_song(event) {
@@ -126,33 +138,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const searchValue = document.querySelector("#search").value.toLowerCase();
 
-    const filtered = songs.filter((item) => {
-      return item.title.toLowerCase().includes(searchValue);
+    const filtered = songs.filter((song) => {
+      return song.title.toLowerCase().includes(searchValue);
     });
 
     songsContainer.innerHTML = "";
-    filtered.forEach((item) => {
+    filtered.forEach((song) => {
       const section = document.createElement("section");
       section.classList.add("song");
       section.innerHTML = `
-        <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
-        item.title
+        <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+        song.title
       }</span>
-        <span>${item.genre}</span>
-        <span>${item.bpm}</span>
-        <span>${item.duration}</span>
+        <span>${song.genre}</span>
+        <span>${song.bpm}</span>
+        <span>${song.duration}</span>
         <span class="like">
           <img src="${
-            item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-          }" alt="like" data-liked="${item.liked}" />
+            song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+          }" alt="like" data-liked="${song.liked}" />
         </span>`;
 
-      section.addEventListener("click", () => infoFunction(item));
+      section.addEventListener("click", () => infoFunction(song));
       songsContainer.appendChild(section);
 
       const likeButton = section.querySelector(".like img");
       likeButton.addEventListener("click", () =>
-        handleLikeButtonClick(item, likeButton)
+        handleLikeButtonClick(song, likeButton)
       );
     });
   }
@@ -162,36 +174,36 @@ document.addEventListener("DOMContentLoaded", () => {
   function StyleMusic(event) {
     event.preventDefault();
     const selectMusic = document.querySelector("#typeOfMusic").value;
-    const filtered = songs.filter((item) => {
-      return item.genre.includes(selectMusic);
+    const filtered = songs.filter((song) => {
+      return song.genre.includes(selectMusic);
     });
     if (selectMusic === "All") {
       songsContainer.innerHTML = "";
       filtered = fetchAndDisplaySongs();
     }
     songsContainer.innerHTML = "";
-    filtered.forEach((item) => {
+    filtered.forEach((song) => {
       const section = document.createElement("section");
       section.classList.add("song");
       section.innerHTML = `
-        <span><img class="imgSongs" src="${item.coverUrl}" alt="song" /> ${
-        item.title
+        <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+        song.title
       }</span>
-      <span>${item.genre}</span>
-      <span>${item.bpm}</span>
-      <span>${item.duration}</span>
+      <span>${song.genre}</span>
+      <span>${song.bpm}</span>
+      <span>${song.duration}</span>
       <span class="like">
         <img src="${
-          item.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-        }" alt="like" data-liked="${item.liked}" />
+          song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+        }" alt="like" data-liked="${song.liked}" />
       </span>`;
 
-      section.addEventListener("click", () => infoFunction(item));
+      section.addEventListener("click", () => infoFunction(song));
       songsContainer.appendChild(section);
 
       const likeButton = section.querySelector(".like img");
       likeButton.addEventListener("click", () =>
-        handleLikeButtonClick(item, likeButton)
+        handleLikeButtonClick(song, likeButton)
       );
     });
   }

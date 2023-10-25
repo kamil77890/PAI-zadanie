@@ -466,6 +466,7 @@ main {
   display: none;
 
   width: 750px;
+  height: 1000px;
   margin-left: 80px;
 }
 .content > img {
