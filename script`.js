@@ -11,8 +11,11 @@ async function fetchAndDisplaySongs() {
     songs.push(song);
   });
   const addedone = songs.map((song) => ({ ...song, liked: false }));
-  console.log(addedone);
+  const likedSong = addedone.map((song) => song.liked);
+  console.log(likedSong);
+  return likedSong;
 }
+
 
 fetchAndDisplaySongs();
 // console.log(songs);

@@ -8,8 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("form");
   const selectMusic = document.querySelector("#selectMusic");
   const favorites = document.querySelector("#favorites");
+  const songsButton = document.querySelector("#songButton");
+  const Artist = document.querySelector("#Artist");
+  const artistContainer = document.querySelector("#artistContainer");
+  const info = document.querySelector(".info");
 
   const music = [];
+  const songs = [];
 
   async function fetchAndDisplaySongs() {
     const response = await fetch(
@@ -41,64 +46,96 @@ document.addEventListener("DOMContentLoaded", () => {
         handleLikeButtonClick(songs, likeButton)
       );
       music.push(song);
-      const songs = music.map((song) => ({ ...song, liked: false }));
+      songs.push({ ...song, liked: false });
     });
   }
-
+  songsButton.addEventListener("click", fetchAndDisplaySongs);
   fetchAndDisplaySongs();
-
-  function handleLikeButtonClick(songs, likeButton) {
-    songs.liked = !songs.liked;
-    likeButton.src = songs.liked
-      ? "./img/heart-solid.svg"
-      : "./img/heart-regular.svg";
-  }
-
-  function showFavorites(songs) {
-    const songsContainer = document.querySelector("#songs");
-    const favorites = document.querySelector("#favorites");
-
-    // Ukryj kontener zwykłych utworów
+  function ArtistShowFunction() {
     songsContainer.style.display = "none";
+    info.style.display = "none"
+    artistContainer.style.display = "flex";
+    artistContainer.innerHTML = "";
 
-    // Wyświetl kontener ulubionych utworów
-    favorites.style.display = "flex";
+    const artistsMap = new Map();
 
-    // Wyczyść wcześniejszą zawartość kontenera ulubionych
-    favorites.innerHTML = "";
-
-    // Przeiteruj przez wszystkie utwory
     songs.forEach((song) => {
-      if (song.liked) {
-        const section = document.createElement("section");
-        section.classList.add("song");
-        section.innerHTML = `
-          <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
-          song.title
-        }</span>
-          <span>${song.genre}</span>
-          <span>${song.bpm}</span>
-          <span>${song.duration}</span>
-          <span class="like">
-            <img src="${
-              song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-            }" alt="like" data-liked="${song.liked}" />
-          </span>`;
+      song.artists.forEach((artist) => {
+        artistsMap.set(artist, song.coverUrl);
+      });
+    });
 
-        section.addEventListener("click", () => infoFunction(song));
-
-        // Dodaj sekcję do kontenera ulubionych utworów
-        favorites.appendChild(section);
-
-        const likeButton = section.querySelector(".like img");
-        likeButton.addEventListener("click", () =>
-          handleLikeButtonClick(song, likeButton)
-        );
-      }
+    artistsMap.forEach((img, artist) => {
+      const section = document.createElement("section");
+      section.classList.add("artist");
+      section.style.backgroundImage = `url('${img}')`;
+      const textContainer = document.createElement("div");
+      textContainer.classList.add("text-container");
+      textContainer.innerHTML = `<h2>${artist}</h2>`;
+      section.appendChild(textContainer);
+      artistContainer.appendChild(section);
     });
   }
 
-  favoritesButton.addEventListener("click", showFavorites);
+  Artist.addEventListener("click", ArtistShowFunction);
+
+  //   // function showCustomContextMenu(event) {
+  //   //   event.preventDefault();
+  //   //   const x = event.clientX;
+  //   //   const y = event.clientY;
+  //   //   customContextMenu.style.display = "block";
+  //   //   customContextMenu.style.left = x + "px";
+  //   //   customContextMenu.style.top = y + "px";
+  //   // }
+
+  //   // const songs = document.querySelectorAll(".song");
+
+  //   // songs.forEach((song) => {
+  //   //   song.addEventListener("contextmenu", showCustomContextMenu);
+  //   // });
+
+  //   // document.addEventListener("click", (event) => {
+  //   //   if (event.button === 0) {
+  //   //     customContextMenu.style.display = "none";
+  //   //   }
+  //   // });
+
+  //   function showFavorites(songs) {
+  //     songsContainer.style.display = "none";
+  //     favorites.style.display = "flex";
+  //     const likedSong = songs.map((song) => song.liked);
+  //     const allLiked = likedSong.every((liked) => liked === true);
+  //     favorites.innerHTML = "";
+  //     songs.forEach((song) => {
+  //       if (allLiked) {
+  //         const section = document.createElement("section");
+  //         section.classList.add("song");
+  //         section.innerHTML = `
+  //           <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+  //           song.title
+  //         }</span>
+  //           <span>${song.genre}</span>
+  //           <span>${song.bpm}</span>
+  //           <span>${song.duration}</span>
+  //           <span class="like">
+  //             <img src="${
+  //               song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+  //             }" alt="like" data-liked="${song.liked}" />
+  //           </span>`;
+
+  //         section.addEventListener("click", () => infoFunction(song));
+
+  //         favorites.appendChild(section);
+
+  //         const likeButton = section.querySelector(".like img");
+  //         likeButton.addEventListener("click", () =>
+  //           handleLikeButtonClick(song, likeButton)
+  //         );
+  //       }
+  //     });
+  //   }
+
+  //   favoritesButton.addEventListener("click", showFavorites);
 
   function infoFunction(song) {
     rightAside.style.display = "block";
@@ -131,82 +168,95 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  styleMusic();
-  //-----------beta testy----------------
-  function search_song(event) {
-    event.preventDefault();
+  //   styleMusic();
+  //   function search_song(event) {
+  //     event.preventDefault();
 
-    const searchValue = document.querySelector("#search").value.toLowerCase();
+  //     const searchValue = document.querySelector("#search").value.toLowerCase();
 
-    const filtered = songs.filter((song) => {
-      return song.title.toLowerCase().includes(searchValue);
-    });
+  //     const filtered = songs.filter((song) => {
+  //       return song.title.toLowerCase().includes(searchValue);
+  //     });
 
-    songsContainer.innerHTML = "";
-    filtered.forEach((song) => {
-      const section = document.createElement("section");
-      section.classList.add("song");
-      section.innerHTML = `
-        <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
-        song.title
-      }</span>
-        <span>${song.genre}</span>
-        <span>${song.bpm}</span>
-        <span>${song.duration}</span>
-        <span class="like">
-          <img src="${
-            song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-          }" alt="like" data-liked="${song.liked}" />
-        </span>`;
+  //     songsContainer.innerHTML = "";
+  //     filtered.forEach((song) => {
+  //       const section = document.createElement("section");
+  //       section.classList.add("song");
+  //       section.innerHTML = `
+  //         <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+  //         song.title
+  //       }</span>
+  //         <span>${song.genre}</span>
+  //         <span>${song.bpm}</span>
+  //         <span>${song.duration}</span>
+  //         <span class="like">
+  //           <img src="${
+  //             song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+  //           }" alt="like" data-liked="${song.liked}" />
+  //         </span>`;
 
-      section.addEventListener("click", () => infoFunction(song));
-      songsContainer.appendChild(section);
+  //       section.addEventListener("click", () => infoFunction(song));
+  //       songsContainer.appendChild(section);
 
-      const likeButton = section.querySelector(".like img");
-      likeButton.addEventListener("click", () =>
-        handleLikeButtonClick(song, likeButton)
-      );
-    });
-  }
+  //       const likeButton = section.querySelector(".like img");
+  //       likeButton.addEventListener("click", () =>
+  //         handleLikeButtonClick(song, likeButton)
+  //       );
+  //     });
+  //   }
 
-  form.addEventListener("submit", search_song);
+  //   form.addEventListener("submit", search_song);
 
   function StyleMusic(event) {
     event.preventDefault();
     const selectMusic = document.querySelector("#typeOfMusic").value;
-    const filtered = songs.filter((song) => {
-      return song.genre.includes(selectMusic);
-    });
+
     if (selectMusic === "All") {
       songsContainer.innerHTML = "";
-      filtered = fetchAndDisplaySongs();
+      fetchAndDisplaySongs();
+    } else {
+      const filtered = music.filter((song) => {
+        return song.genre.includes(selectMusic);
+      });
+
+      songsContainer.innerHTML = "";
+      filtered.forEach((song) => {
+        const section = document.createElement("section");
+        section.classList.add("song");
+        section.innerHTML = `
+          <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+          song.title
+        }</span>
+          <span>${song.genre}</span>
+          <span>${song.bpm}</span>
+          <span>${song.duration}</span>
+          <span class="like">
+            <img src="${
+              song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+            }" alt="like" data-liked="${song.liked}" />
+          </span>`;
+
+        section.addEventListener("click", () => infoFunction(song));
+        songsContainer.appendChild(section);
+
+        const likeButton = section.querySelector(".like img");
+        likeButton.addEventListener("click", () =>
+          handleLikeButtonClick(song, likeButton)
+        );
+      });
     }
-    songsContainer.innerHTML = "";
-    filtered.forEach((song) => {
-      const section = document.createElement("section");
-      section.classList.add("song");
-      section.innerHTML = `
-        <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
-        song.title
-      }</span>
-      <span>${song.genre}</span>
-      <span>${song.bpm}</span>
-      <span>${song.duration}</span>
-      <span class="like">
-        <img src="${
-          song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-        }" alt="like" data-liked="${song.liked}" />
-      </span>`;
-
-      section.addEventListener("click", () => infoFunction(song));
-      songsContainer.appendChild(section);
-
-      const likeButton = section.querySelector(".like img");
-      likeButton.addEventListener("click", () =>
-        handleLikeButtonClick(song, likeButton)
-      );
-    });
   }
 
   selectMusic.addEventListener("change", StyleMusic);
+
+  const boxElements = document.querySelectorAll(".box");
+  boxElements.forEach((box) => {
+    box.addEventListener("click", () => {
+      boxElements.forEach((element) => {
+        element.classList.remove("activeElement");
+      });
+
+      box.classList.add("activeElement");
+    });
+  });
 });
