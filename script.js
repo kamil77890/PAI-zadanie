@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = await response.json();
 
     data.forEach((song) => {
+      music.push(song);
+      songs.push({ ...song, liked: false });
       const section = document.createElement("section");
       section.classList.add("song");
       section.innerHTML = `
@@ -43,17 +45,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const likeButton = section.querySelector(".like img");
       likeButton.addEventListener("click", () =>
-        handleLikeButtonClick(songs, likeButton)
+        handleLikeButtonClick(song, likeButton)
       );
-      music.push(song);
-      songs.push({ ...song, liked: false });
     });
   }
   songsButton.addEventListener("click", fetchAndDisplaySongs);
   fetchAndDisplaySongs();
+
   function ArtistShowFunction() {
     songsContainer.style.display = "none";
-    info.style.display = "none"
+    info.style.display = "none";
     artistContainer.style.display = "flex";
     artistContainer.innerHTML = "";
 
@@ -78,28 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   Artist.addEventListener("click", ArtistShowFunction);
-
-  //   // function showCustomContextMenu(event) {
-  //   //   event.preventDefault();
-  //   //   const x = event.clientX;
-  //   //   const y = event.clientY;
-  //   //   customContextMenu.style.display = "block";
-  //   //   customContextMenu.style.left = x + "px";
-  //   //   customContextMenu.style.top = y + "px";
-  //   // }
-
-  //   // const songs = document.querySelectorAll(".song");
-
-  //   // songs.forEach((song) => {
-  //   //   song.addEventListener("contextmenu", showCustomContextMenu);
-  //   // });
-
-  //   // document.addEventListener("click", (event) => {
-  //   //   if (event.button === 0) {
-  //   //     customContextMenu.style.display = "none";
-  //   //   }
-  //   // });
-
   //   function showFavorites(songs) {
   //     songsContainer.style.display = "none";
   //     favorites.style.display = "flex";
@@ -155,6 +134,12 @@ document.addEventListener("DOMContentLoaded", () => {
       song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
     }" alt="like"/>`;
   }
+  function handleLikeButtonClick(song, likeButton) {
+    song.liked = !song.liked;
+    likeButton.innerHTML = song.liked
+      ? '<img src="./img/heart-solid.svg" />'
+      : '<img src="./img/heart-regular.svg" />';
+  }
 
   async function styleMusic() {
     const responce = await fetch(
@@ -168,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  //   styleMusic();
+  styleMusic();
   //   function search_song(event) {
   //     event.preventDefault();
 
