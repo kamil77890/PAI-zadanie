@@ -12,6 +12,10 @@
       href="https://fonts.googleapis.com/css2?family=Assistant:wght@200&family=Fuggles&family=Nunito+Sans&family=Young+Serif&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
+    />
   </head>
   <body>
     <aside>
@@ -50,17 +54,6 @@
           <h3>Favorites</h3>
         </section>
       </section>
-      <section class="addPlaylist">
-        <p>Playlist</p>
-        <button>+</button>
-      </section>
-
-      <section id="customContextMenu" class="custom-context-menu">
-        <section class="context-menu-item">
-          <img class="img" src="./img/play-solid.svg" alt="Playlist" />
-          <h3>Your Playlist</h3>
-        </section>
-      </section>
     </aside>
     <main>
       <header>
@@ -83,7 +76,7 @@
               src="./img/magnifying-glass-solid.svg"
               alt="Search"
             />
-            <input type="search" placeholder="Search..." name="search" />
+            <input id="search" type="search" placeholder="Search..." name="search" />
           </label>
         </form>
         <form id="selectMusic">
@@ -91,7 +84,13 @@
             <option value="All">All</option>
           </select>
         </form>
-
+        <form id="speedOfMusic">
+          <select class="select" name="Style" id="speedOfMusic">
+            <option value="slow">Slow</option>
+            <option value="medium">Medium</option>
+            <option value="fast">Fast</option>
+          </select>
+        </form>
         <button class="premium">Premium</button>
         <img class="bell" src="./img/bell-solid.svg" alt="bell" />
         <img class="message" src="./img/message-regular.svg" alt="message" />
@@ -99,7 +98,6 @@
           <img class="user-img" src="./img/user-solid.svg" alt="user" />
           <section class="settings">
             <h3>Username</h3>
-            <p>Settings</p>
           </section>
         </section>
       </header>
@@ -116,10 +114,31 @@
           <span>BPM</span>
           <span>Duration</span>
           <span>Favorites</span>
+          <section class="sortLenght">
+            <img id="unsort" src="./img/caret-up-solid.svg" alt="up" />
+            <img id="sort" src="./img/caret-down-solid.svg" alt="down" />
+          </section>
         </section>
         <section id="songs" class="songs"></section>
         <section id="favorites"></section>
-        <section id="artistContainer"></section>
+        <div class="footer-basic">
+          <footer>
+            <div class="social">
+              <a href="#"><i class="icon ion-social-instagram"></i></a
+              ><a href="#"><i class="icon ion-social-snapchat"></i></a
+              ><a href="#"><i class="icon ion-social-twitter"></i></a
+              ><a href="#"><i class="icon ion-social-facebook"></i></a>
+            </div>
+            <ul class="list-inline">
+              <li class="list-inline-item"><a href="#">Home</a></li>
+              <li class="list-inline-item"><a href="#">Services</a></li>
+              <li class="list-inline-item"><a href="#">About</a></li>
+              <li class="list-inline-item"><a href="#">Terms</a></li>
+              <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">Company Name © 2018</p>
+          </footer>
+        </div>
         <aside class="right-side">
           <section class="title">
             <h1 class="title"></h1>
@@ -128,7 +147,13 @@
           <section class="wykonawca"></section>
           <section class="liked"></section>
           <section class="tools">
-            <input type="range" max="100" value="0" />
+            <div class="wrapper">
+              <div class="content1">
+                <div class="range">
+                  <input type="range" id="range1" />
+                </div>
+              </div>
+            </div>
             <section class="tool">
               <img
                 class="arrow"
@@ -150,5 +175,7 @@
         </aside>
       </article>
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

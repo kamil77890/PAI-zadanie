@@ -1,3 +1,5 @@
+//miłego oglądania :D
+
 document.addEventListener("DOMContentLoaded", () => {
   const songsContainer = document.querySelector("#songs");
   const rightAside = document.querySelector(".right-side");
@@ -9,22 +11,60 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectMusic = document.querySelector("#selectMusic");
   const favorites = document.querySelector("#favorites");
   const songsButton = document.querySelector("#songButton");
-  const Artist = document.querySelector("#Artist");
-  const artistContainer = document.querySelector("#artistContainer");
   const info = document.querySelector(".info");
+  const sort = document.querySelector("#sort");
+  const sortLenght = document.querySelector(".sortLenght");
+  const unsort = document.querySelector("#unsort");
 
   const music = [];
-  const songs = [];
+  const songs = new Set();
 
   async function fetchAndDisplaySongs() {
     const response = await fetch(
       "https://gist.githubusercontent.com/techniadrian/c39f844edbacee0439bfeb107227325b/raw/81eec7847b1b3dfa1c7031586405c93e9a9c1a2d/songs.json"
     );
     const data = await response.json();
-
+    songsContainer.innerHTML = "";
     data.forEach((song) => {
-      music.push(song);
-      songs.push({ ...song, liked: false });
+      if (!songs.has(song.title)) {
+        music.push(song);
+        songs.add(song.title);
+        const section = document.createElement("section");
+        section.classList.add("song");
+        section.innerHTML = `
+          <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+          song.title
+        }</span>
+          <span>${song.genre}</span>
+          <span>${song.bpm}</span>
+          <span>${song.duration}</span>
+          <span class="like">
+            <img src="${
+              song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+            }" alt="like" data-liked="${song.liked}" />
+          </span>`;
+
+        section.addEventListener("click", () => infoFunction(song));
+        songsContainer.appendChild(section);
+
+        const likeButton = section.querySelector(".like img");
+        likeButton.addEventListener("click", () =>
+          handleLikeButtonClick(song, likeButton)
+        );
+      }
+    });
+  }
+  fetchAndDisplaySongs();
+
+  function displayAllSongs() {
+    songsContainer.style.display = "block";
+    rightAside.style.display = "none";
+    favorites.style.display = "none";
+    info.style.display = "flex";
+
+    songsContainer.innerHTML = "";
+
+    music.forEach((song) => {
       const section = document.createElement("section");
       section.classList.add("song");
       section.innerHTML = `
@@ -49,72 +89,150 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
   }
-  songsButton.addEventListener("click", fetchAndDisplaySongs);
-  fetchAndDisplaySongs();
 
-  function ArtistShowFunction() {
+  songsButton.addEventListener("click", displayAllSongs);
+
+  function displayFavoriteSongs() {
     songsContainer.style.display = "none";
-    info.style.display = "none";
-    artistContainer.style.display = "flex";
-    artistContainer.innerHTML = "";
+    rightAside.style.display = "none";
+    favorites.style.display = "block";
+    info.style.display = "flex";
+    sortLenght.innerHTML = "";
+    favorites.innerHTML = "";
 
-    const artistsMap = new Map();
+    music.forEach((song) => {
+      if (song.liked) {
+        const section = document.createElement("section");
+        section.classList.add("song");
+        section.innerHTML = `
+          <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+          song.title
+        }</span>
+          <span>${song.genre}</span>
+          <span>${song.bpm}</span>
+          <span>${song.duration}</span>
+          <span class="like">
+            <img src="${
+              song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+            }" alt="like" data-liked="${song.liked}" />
+          </span>`;
 
-    songs.forEach((song) => {
-      song.artists.forEach((artist) => {
-        artistsMap.set(artist, song.coverUrl);
-      });
-    });
+        section.addEventListener("click", () => infoFunction(song));
+        favorites.appendChild(section);
 
-    artistsMap.forEach((img, artist) => {
-      const section = document.createElement("section");
-      section.classList.add("artist");
-      section.style.backgroundImage = `url('${img}')`;
-      const textContainer = document.createElement("div");
-      textContainer.classList.add("text-container");
-      textContainer.innerHTML = `<h2>${artist}</h2>`;
-      section.appendChild(textContainer);
-      artistContainer.appendChild(section);
+        const likeButton = section.querySelector(".like img");
+        likeButton.addEventListener("click", () =>
+          handleLikeButtonClick(song, likeButton)
+        );
+      }
     });
   }
 
-  Artist.addEventListener("click", ArtistShowFunction);
-  //   function showFavorites(songs) {
-  //     songsContainer.style.display = "none";
-  //     favorites.style.display = "flex";
-  //     const likedSong = songs.map((song) => song.liked);
-  //     const allLiked = likedSong.every((liked) => liked === true);
-  //     favorites.innerHTML = "";
-  //     songs.forEach((song) => {
-  //       if (allLiked) {
-  //         const section = document.createElement("section");
-  //         section.classList.add("song");
-  //         section.innerHTML = `
-  //           <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
-  //           song.title
-  //         }</span>
-  //           <span>${song.genre}</span>
-  //           <span>${song.bpm}</span>
-  //           <span>${song.duration}</span>
-  //           <span class="like">
-  //             <img src="${
-  //               song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-  //             }" alt="like" data-liked="${song.liked}" />
-  //           </span>`;
+  function sortFunction(songs) {
+    const sortedSongs = [...songs];
+    sortedSongs.sort((a, b) => {
+      const titleA = a.title.toLowerCase();
+      const titleB = b.title.toLowerCase();
+      if (titleA < titleB) return -1;
+      if (titleA > titleB) return 1;
+      return 0;
+    });
+    return sortedSongs;
+  }
 
-  //         section.addEventListener("click", () => infoFunction(song));
+  sort.addEventListener("click", () => {
+    const sortedSongs = sortFunction(music);
+    displaySortedSongs(sortedSongs);
+  });
+  unsort.addEventListener("click", () => {
+    displayAllSongs();
+  });
 
-  //         favorites.appendChild(section);
+  function displaySortedSongs(sortedSongs) {
+    favorites.innerHTML = "";
+    songsContainer.innerHTML = "";
 
-  //         const likeButton = section.querySelector(".like img");
-  //         likeButton.addEventListener("click", () =>
-  //           handleLikeButtonClick(song, likeButton)
-  //         );
-  //       }
-  //     });
-  //   }
+    sortedSongs.forEach((song) => {
+      const section = document.createElement("section");
+      section.classList.add("song");
+      section.innerHTML = `
+        <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+        song.title
+      }</span>
+        <span>${song.genre}</span>
+        <span>${song.bpm}</span>
+        <span>${song.duration}</span>
+        <span class="like">
+          <img src="${
+            song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+          }" alt="like" data-liked="${song.liked}" />
+        </span>`;
 
-  //   favoritesButton.addEventListener("click", showFavorites);
+      section.addEventListener("click", () => infoFunction(song));
+      songsContainer.appendChild(section);
+
+      const likeButton = section.querySelector(".like img");
+      likeButton.addEventListener("click", () =>
+        handleLikeButtonClick(song, likeButton)
+      );
+    });
+  }
+
+  const input = document.querySelector("#search");
+
+  function inputFunction() {
+    const searchedValue = input.value.toLowerCase();
+    const elements = document.querySelectorAll(".song");
+
+    elements.forEach((element) => {
+      const songsContainer = element.textContent.toLowerCase();
+      element.classList.toggle(
+        "container__item--active",
+        searchedValue && songsContainer.includes(searchedValue)
+      );
+    });
+  }
+
+  input.addEventListener("change", inputFunction);
+
+  function showFavorites() {
+    displaySongsForFavorites();
+    const allSongsLiked = music.every((song) => song.liked);
+    favorites.innerHTML = "";
+
+    music.forEach((song) => {
+      if (song.liked || allSongsLiked) {
+        const section = document.createElement("section");
+        section.classList.add("song");
+        section.innerHTML = `
+          <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+          song.title
+        }</span>
+          <span>${song.genre}</span>
+          <span>${song.bpm}</span>
+          <span>${song.duration}</span>
+          <span class="like">
+            <img src="${
+              song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+            }" alt="like" data-liked="${song.liked}" />
+          </span>`;
+
+        section.addEventListener("click", () => infoFunction(song));
+
+        favorites.appendChild(section);
+
+        const likeButton = section.querySelector(".like img");
+        likeButton.addEventListener("click", () =>
+          handleLikeButtonClick(song, likeButton)
+        );
+      }
+    });
+  }
+  function showFavorites() {
+    displayFavoriteSongs();
+  }
+
+  favoritesButton.addEventListener("click", displayFavoriteSongs);
 
   function infoFunction(song) {
     rightAside.style.display = "block";
@@ -134,18 +252,19 @@ document.addEventListener("DOMContentLoaded", () => {
       song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
     }" alt="like"/>`;
   }
+
   function handleLikeButtonClick(song, likeButton) {
     song.liked = !song.liked;
-    likeButton.innerHTML = song.liked
-      ? '<img src="./img/heart-solid.svg" />'
-      : '<img src="./img/heart-regular.svg" />';
+    likeButton.src = song.liked
+      ? "./img/heart-solid.svg"
+      : "./img/heart-regular.svg";
   }
 
   async function styleMusic() {
-    const responce = await fetch(
+    const response = await fetch(
       "https://gist.githubusercontent.com/techniadrian/6ccdb1c837d431bb84c2dfedbec2e435/raw/60783ebfa89c6fd658aaf556b9f7162553ac0729/genres.json"
     );
-    const data = await responce.json();
+    const data = await response.json();
     data.forEach((song) => {
       if (song !== " ") {
         gentres.innerHTML += `<option value="${song}">${song}</option>`;
@@ -154,57 +273,56 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   styleMusic();
-  //   function search_song(event) {
-  //     event.preventDefault();
 
-  //     const searchValue = document.querySelector("#search").value.toLowerCase();
+  function search_song(event) {
+    event.preventDefault();
 
-  //     const filtered = songs.filter((song) => {
-  //       return song.title.toLowerCase().includes(searchValue);
-  //     });
+    const searchValue = document.querySelector("#search").value.toLowerCase();
+    const filtered = music.filter((song) => {
+      return song.title.toLowerCase().includes(searchValue);
+    });
 
-  //     songsContainer.innerHTML = "";
-  //     filtered.forEach((song) => {
-  //       const section = document.createElement("section");
-  //       section.classList.add("song");
-  //       section.innerHTML = `
-  //         <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
-  //         song.title
-  //       }</span>
-  //         <span>${song.genre}</span>
-  //         <span>${song.bpm}</span>
-  //         <span>${song.duration}</span>
-  //         <span class="like">
-  //           <img src="${
-  //             song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-  //           }" alt="like" data-liked="${song.liked}" />
-  //         </span>`;
+    songsContainer.innerHTML = "";
+    filtered.forEach((song) => {
+      const section = document.createElement("section");
+      section.classList.add("song");
+      section.innerHTML = `
+        <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+        song.title
+      }</span>
+        <span>${song.genre}</span>
+        <span>${song.bpm}</span>
+        <span>${song.duration}</span>
+        <span class="like">
+          <img src="${
+            song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+          }" alt="like" data-liked="${song.liked}" />
+        </span>`;
 
-  //       section.addEventListener("click", () => infoFunction(song));
-  //       songsContainer.appendChild(section);
+      section.addEventListener("click", () => infoFunction(song));
+      songsContainer.appendChild(section);
 
-  //       const likeButton = section.querySelector(".like img");
-  //       likeButton.addEventListener("click", () =>
-  //         handleLikeButtonClick(song, likeButton)
-  //       );
-  //     });
-  //   }
+      const likeButton = section.querySelector(".like img");
+      likeButton.addEventListener("click", () =>
+        handleLikeButtonClick(song, likeButton)
+      );
+    });
+  }
 
-  //   form.addEventListener("submit", search_song);
+  form.addEventListener("submit", search_song);
 
   function StyleMusic(event) {
     event.preventDefault();
-    const selectMusic = document.querySelector("#typeOfMusic").value;
+    const selectMusic = gentres.value;
+    songsContainer.innerHTML = "";
 
     if (selectMusic === "All") {
-      songsContainer.innerHTML = "";
-      fetchAndDisplaySongs();
+      displayAllSongs();
     } else {
       const filtered = music.filter((song) => {
         return song.genre.includes(selectMusic);
       });
 
-      songsContainer.innerHTML = "";
       filtered.forEach((song) => {
         const section = document.createElement("section");
         section.classList.add("song");
