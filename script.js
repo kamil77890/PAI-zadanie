@@ -8,21 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const favoritesButton = document.querySelector("#favoritesButton");
   const gentres = document.querySelector("#typeOfMusic");
   const form = document.querySelector("form");
-  const selectMusic = document.querySelector("#selectMusic");
   const favorites = document.querySelector("#favorites");
   const songsButton = document.querySelector("#songButton");
-  const info = document.querySelector(".info");
-  const sort = document.querySelector("#sort");
-  const sortLenght = document.querySelector(".sortLenght");
-  const unsort = document.querySelector("#unsort");
+  const speedOfMusic = document.querySelector("#speedOfMusic");
 
   const music = [];
   const songs = new Set();
 
+  const link =
+    "https://gist.githubusercontent.com/techniadrian/c39f844edbacee0439bfeb107227325b/raw/81eec7847b1b3dfa1c7031586405c93e9a9c1a2d/songs.json";
+
   async function fetchAndDisplaySongs() {
-    const response = await fetch(
-      "https://gist.githubusercontent.com/techniadrian/c39f844edbacee0439bfeb107227325b/raw/81eec7847b1b3dfa1c7031586405c93e9a9c1a2d/songs.json"
-    );
+    const response = await fetch(link);
     const data = await response.json();
     songsContainer.innerHTML = "";
     data.forEach((song) => {
@@ -60,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
     songsContainer.style.display = "block";
     rightAside.style.display = "none";
     favorites.style.display = "none";
-    info.style.display = "flex";
 
     songsContainer.innerHTML = "";
 
@@ -96,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
     songsContainer.style.display = "none";
     rightAside.style.display = "none";
     favorites.style.display = "block";
-    info.style.display = "flex";
     sortLenght.innerHTML = "";
     favorites.innerHTML = "";
 
@@ -139,14 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     return sortedSongs;
   }
-
-  sort.addEventListener("click", () => {
-    const sortedSongs = sortFunction(music);
-    displaySortedSongs(sortedSongs);
-  });
-  unsort.addEventListener("click", () => {
-    displayAllSongs();
-  });
 
   function displaySortedSongs(sortedSongs) {
     favorites.innerHTML = "";
@@ -196,39 +183,6 @@ document.addEventListener("DOMContentLoaded", () => {
   input.addEventListener("change", inputFunction);
 
   function showFavorites() {
-    displaySongsForFavorites();
-    const allSongsLiked = music.every((song) => song.liked);
-    favorites.innerHTML = "";
-
-    music.forEach((song) => {
-      if (song.liked || allSongsLiked) {
-        const section = document.createElement("section");
-        section.classList.add("song");
-        section.innerHTML = `
-          <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
-          song.title
-        }</span>
-          <span>${song.genre}</span>
-          <span>${song.bpm}</span>
-          <span>${song.duration}</span>
-          <span class="like">
-            <img src="${
-              song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
-            }" alt="like" data-liked="${song.liked}" />
-          </span>`;
-
-        section.addEventListener("click", () => infoFunction(song));
-
-        favorites.appendChild(section);
-
-        const likeButton = section.querySelector(".like img");
-        likeButton.addEventListener("click", () =>
-          handleLikeButtonClick(song, likeButton)
-        );
-      }
-    });
-  }
-  function showFavorites() {
     displayFavoriteSongs();
   }
 
@@ -240,14 +194,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const backgroundElement = document.querySelector(".background");
     titleElement.querySelector("h1").innerHTML = song.title;
     backgroundElement.innerHTML = `<img class="background" src="${song.coverUrl}" alt="song" />`;
+
     const list = song.artists;
-    wykonawca.innerHTML = "";
-    list.forEach((artist, index) => {
-      if (index > 0) {
-        wykonawca.innerHTML += ", ";
-      }
-      wykonawca.innerHTML += artist;
-    });
+    wykonawca.innerHTML = list.join(", ");
     liked.innerHTML = `<img src="${
       song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
     }" alt="like"/>`;
@@ -350,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  selectMusic.addEventListener("change", StyleMusic);
+  selectMusic.addEventListener("input", StyleMusic);
 
   const boxElements = document.querySelectorAll(".box");
   boxElements.forEach((box) => {
@@ -361,5 +310,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
       box.classList.add("activeElement");
     });
+  });
+
+  function displayFilteredSongs(filtered) {
+    if (filtered.length === 0) {
+      alert("No idiota");
+    } else {
+      filtered.forEach((song) => {
+        const section = document.createElement("section");
+        section.classList.add("song");
+        section.innerHTML = `
+          <span><img class="imgSongs" src="${song.coverUrl}" alt="song" /> ${
+          song.title
+        }</span>
+          <span>${song.genre}</span>
+          <span>${song.bpm}</span>
+          <span>${song.duration}</span>
+          <span class="like">
+            <img src="${
+              song.liked ? "./img/heart-solid.svg" : "./img/heart-regular.svg"
+            }" alt="like" data-liked="${song.liked}" />
+          </span>`;
+
+        section.addEventListener("click", () => infoFunction(song));
+        songsContainer.appendChild(section);
+
+        const likeButton = section.querySelector(".like img");
+        likeButton.addEventListener("click", () =>
+          handleLikeButtonClick(song, likeButton)
+        );
+      });
+    }
+    console.log("filtered songs", filtered);
+  }
+
+  function BPMSearch(songs, songsContainer, event) {
+    event.preventDefault();
+    const bpmValue = speedOfMusic.value;
+    songsContainer.innerHTML = "";
+
+    if (bpmValue === "All") {
+      displayAllSongs();
+    } else if (bpmValue === "Slow") {
+      const filtered = songs.filter((song) => parseInt(song.bpm) < 100);
+      displayFilteredSongs(filtered);
+    } else if (bpmValue === "Medium") {
+      const filtered = songs.filter((song) => {
+        const bpm = parseInt(song.bpm);
+        return bpm >= 100 && bpm <= 130;
+      });
+      displayFilteredSongs(filtered);
+    } else if (bpmValue === "Fast") {
+      const filtered = songs.filter((song) => parseInt(song.bpm) > 130);
+      displayFilteredSongs(filtered);
+    }
+  }
+
+  speedOfMusic.addEventListener("input", (event) => {
+    BPMSearch(music, songsContainer, event);
   });
 });

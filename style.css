@@ -8,6 +8,7 @@
   --background-page: rgba(18, 18, 18, 1);
   --white: rgba(255, 255, 255, 1);
   --black: rgba(3, 0, 0, 1);
+  --player-background: #6b6b6b;
 }
 
 html,
@@ -21,12 +22,72 @@ body {
   display: flex;
   margin: 0;
 }
-select {
-  width: 100px;
-  height: 30px;
-  border-radius: 20px;
-  color: var(--black);
-  padding-left: 6px;
+:root {
+  --darkreader-bg--darkreader-neutral-background: #0f1111;
+  --darkreader-text--darkreader-neutral-text: #cdc8c2;
+  --darkreader-bg--darkreader-selection-background: #003e88;
+  --darkreader-text--darkreader-selection-text: #d8d4cf;
+}
+:root {
+  --darkreader-bg--background-page: #0e0f0f;
+  --darkreader-bg--white: #181a1b;
+  --darkreader-text--white: #e8e6e3;
+  --darkreader-border--white: #303436;
+  --darkreader-text--black: #e7e5e2;
+  --player-background: #6b6b6b;
+}
+:root {
+  --darkreader-neutral-background: #131516;
+  --darkreader-neutral-text: #d8d4cf;
+  --darkreader-selection-background: #004daa;
+  --darkreader-selection-text: #e8e6e3;
+}
+
+html {
+  background-color: var(
+    --darkreader-bg--darkreader-neutral-background
+  ) !important;
+  color: var(--darkreader-text--darkreader-neutral-text) !important;
+}
+
+html {
+  color-scheme: dark !important;
+}
+::-webkit-scrollbar {
+  background-color: #202324;
+  color: #aba499;
+}
+::-webkit-scrollbar-corner {
+  background-color: #181a1b;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #454a4d;
+}
+::selection {
+  background-color: var(
+    --darkreader-bg--darkreader-selection-background
+  ) !important;
+  color: var(--darkreader-text--darkreader-selection-text) !important;
+}
+
+::selection {
+  background-color: #004daa !important;
+  color: #e8e6e3 !important;
+}
+html {
+  color-scheme: dark !important;
+  background-color: var(--darkreader-neutral-background) !important;
+  color: var(--darkreader-neutral-text) !important;
+}
+
+body {
+  background-color: var(--darkreader-neutral-background) !important;
+  color: var(--darkreader-neutral-text) !important;
+}
+
+::selection {
+  background-color: var(--darkreader-selection-background) !important;
+  color: var(--darkreader-selection-text) !important;
 }
 
 header {
@@ -37,7 +98,115 @@ header {
   height: 150px;
   flex-grow: 1;
   overflow-y: hidden;
+  background-color: var(--background-page);
 }
+
+/* Styling arrow icons */
+.arrow {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* Styling search bar */
+form {
+  display: flex;
+  align-items: center;
+}
+
+label {
+  display: flex;
+  background-color: var(--white);
+  width: 300px;
+  height: 30px;
+  padding: 7px;
+  border-radius: 20px;
+}
+
+input {
+  margin-left: 3px;
+  width: 100%;
+  background-color: var(--white);
+  color: var(--black);
+  border: none;
+}
+
+input:focus {
+  outline: none;
+  letter-spacing: 0.2mm;
+}
+
+.search {
+  width: 20px;
+  background-color: var(--white);
+  border: none;
+  cursor: pointer;
+}
+
+/* Styling select dropdowns */
+.select {
+  width: 100px;
+  height: 30px;
+  border-radius: 20px;
+  color: var(--black);
+  padding-left: 6px;
+}
+
+/* Styling premium button and icons */
+.premium {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 90px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: rgb(180, 184, 180);
+  font-family: cursive;
+  text-align: center;
+  font-size: 16px;
+  color: var(--white);
+  border: 1.5px solid var(--white);
+  cursor: pointer;
+}
+
+.bell {
+  width: 25px;
+  height: 25px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+/* Styling user section */
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.user-img {
+  width: 30px;
+  height: 30px;
+}
+
+.settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.settings > h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  color: var(--white);
+}
+
+/* Additional styles for your specific design */
+/* ... Add more styles as needed ... */
 
 .arrow {
   width: 30px;
@@ -102,7 +271,7 @@ header {
   width: 95%;
   max-width: 500px;
   height: 132px;
-  background: #6b6b6b;
+  background: var(--background-page);
 }
 #audio-player-container::before {
   position: absolute;
@@ -161,11 +330,23 @@ output {
   color: var(--white);
   scale: 1.09;
 }
-.premium {
+#logIn {
+  width: 300px;
+  height: 450px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: #328a32;
+}
+.premium,
+#mode-switch {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 600px;
+  margin-left: 350px;
+  gap: 30px;
   width: 90px;
   height: 40px;
   border-radius: 20px;
@@ -504,7 +685,6 @@ main {
   border-radius: 1rem;
 }
 
-
 .artist {
   display: flex;
   justify-content: center;
@@ -763,7 +943,6 @@ h1 {
   color: #4b4949;
   text-align: center;
 }
-
 
 .content1 {
   width: 100%;
